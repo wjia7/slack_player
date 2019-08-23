@@ -76,7 +76,7 @@ def handle_command(command, channel, creator, pl, current_song):
             current_song = music_player2.YoutubeAudio(song_data)
             current_song.play_audio()
             song_name = filter_title(song_data['name'])
-            response = "*Now playing:* {0} \n*Picked by:* {1}".format(song_name, current_song.get_creator())
+            response = "*Now playing:* {0} \n*Requested by:* {1}".format(song_name, current_song.get_creator())
 
         print("current play list",pl.get_playlist)
 
@@ -90,7 +90,7 @@ def handle_command(command, channel, creator, pl, current_song):
         current_song = music_player2.YoutubeAudio(song_data)
         current_song.play_audio()
         song_name = filter_title(current_song.get_name())
-        response = "*Now playing:* {0} \n*Picked by:* {1}".format(song_name, current_song.get_creator())
+        response = "*Now playing:* {0} \n*Requested by:* {1}".format(song_name, current_song.get_creator())
 
     elif command.startswith("nextup"):
         song_list = pl.get_next_info(limit=5)
@@ -155,7 +155,7 @@ if __name__ == "__main__":
         current_song = music_player2.YoutubeAudio(song_data)
         current_song.play_audio()
         song_name = filter_title(current_song.get_name())
-        response = "*Now playing:* {0} \n*Picked by:* {1}".format(song_name, "DJ Robot")
+        response = "*Now playing:* {0} \n*Requested by:* {1}".format(song_name, "Auto DJ")
         slack_client.api_call("chat.postMessage", channel=channel, text=response)
 
         while True:
@@ -178,7 +178,7 @@ if __name__ == "__main__":
                     current_song = music_player2.YoutubeAudio(song_data)
                     current_song.play_audio()
                     song_name = filter_title(current_song.get_name())
-                    response = "*Now playing:* {0} \n*Picked by:* {1}".format(song_name, current_song.get_creator())
+                    response = "*Now playing:* {0} \n*Requested by:* {1}".format(song_name, current_song.get_creator())
                     print("channel: ", this_channel)
                     slack_client.api_call("chat.postMessage", channel=this_channel, text=response)
 
