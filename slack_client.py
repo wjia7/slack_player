@@ -109,8 +109,18 @@ def handle_command(command, channel, creator, pl, current_song):
 
     elif command.startswith("stop"):
         response = "stop music"
+        slack_client.api_call(
+            "chat.postMessage",
+            channel=channel,
+            text=response
+        )
         sys.exit()
 
+    elif command.startswith("volume"):
+        volume_keywords = command[7:]
+        print(volume_keywords)
+        if volume_keywords.isdigit():
+            current_song.setvolume(int(volume_keywords))
 
     # Sends the response back to the channel
     print("internal channel", channel)
