@@ -18,6 +18,7 @@ class YoutubeAudio:
         self.time = self.keywords['time']
         self.creator = self.keywords['creator']
         self.player = vlc.MediaPlayer(self.url)
+        self.volume = 50
 
 
     def get_url(self):
@@ -43,9 +44,13 @@ class YoutubeAudio:
     def stop_audio(self):
         self.player.stop()
 
+    def get_volume(self):
+        return self.volume
+
     def set_volume(self, number):
+        self.volume = number
         if 100 >= number >= 0:
-            self.player.audio_set_volume(number)
+            self.player.audio_set_volume(self.volume)
         else:
             return -1
 

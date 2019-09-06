@@ -121,6 +121,12 @@ def handle_command(command, channel, creator, pl, current_song):
         print(volume_keywords)
         if volume_keywords.isdigit():
             current_song.set_volume(int(volume_keywords))
+        elif volume_keywords == "louder":
+            song_volume = current_song.get_volume()
+            current_song.set_volume(song_volume+5)
+        elif volume_keywords == "quieter":
+            song_volume = current_song.get_volume()
+            current_song.set_volume(song_volume-5)
 
     # Sends the response back to the channel
     print("internal channel", channel)
