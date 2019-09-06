@@ -108,7 +108,7 @@ def handle_command(command, channel, creator, pl, current_song):
                    "stop - close the app \n"
 
     elif command.startswith("stop"):
-        response = "stop music"
+        response = "Goodbyes are not forever, Goodbyes are not the end. :robot_face:"
         slack_client.api_call(
             "chat.postMessage",
             channel=channel,
