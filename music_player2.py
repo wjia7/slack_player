@@ -37,6 +37,7 @@ class YoutubeAudio:
     def play_audio(self):
         print(self.keywords['url'])
         self.player.play()
+        self.player.audio_set_volume(self.volume)
 
     def pause_audio(self):
         self.player.pause()
