@@ -22,6 +22,13 @@ RTM_READ_DELAY = 1 # 1 second delay between reading from RTM
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
 
 
+def _slackify_user(user):
+    return_value = user
+    if not 'DJ Robot' in user:
+        return_value = '<@%s>' % user
+    return return_value
+
+
 def parse_bot_commands(slack_events):
     """
         Parses a list of events coming from the Slack RTM API to find bot commands.
@@ -32,7 +39,7 @@ def parse_bot_commands(slack_events):
         if event["type"] == "message" and not "subtype" in event:
             user_id, message = parse_direct_mention(event["text"])
             if user_id == starterbot_id:
-                return message, event["channel"], global_vars.SLACK_USER_MAP[event["user"]]
+                return message, event["channel"], event["user"]
     return None, None, None
 
 
@@ -76,7 +83,8 @@ def handle_command(command, channel, creator, pl, current_song):
             current_song = music_player2.YoutubeAudio(song_data)
             current_song.play_audio()
             song_name = filter_title(song_data['name'])
-            response = "*Now playing:* {0} \n*Requested by:* {1}".format(song_name, current_song.get_creator())
+            requester = _slackify_user(current_song.get_creator())
+            response = "*Now playing:* {0} \n*Requested by:* <@{1}>".format(song_name, requester)
 
         print("current play list",pl.get_playlist)
 
@@ -90,7 +98,8 @@ def handle_command(command, channel, creator, pl, current_song):
         current_song = music_player2.YoutubeAudio(song_data)
         current_song.play_audio()
         song_name = filter_title(current_song.get_name())
-        response = "*Now playing:* {0} \n*Requested by:* {1}".format(song_name, current_song.get_creator())
+        requester = _slackify_user(current_song.get_creator())
+        response = "*Now playing:* {0} \n*Requested by:* <@{1}>".format(song_name, requester)
 
     elif command.startswith("nextup"):
         song_list = pl.get_next_info(limit=5)
@@ -194,7 +203,8 @@ if __name__ == "__main__":
                     current_song = music_player2.YoutubeAudio(song_data)
                     current_song.play_audio()
                     song_name = filter_title(current_song.get_name())
-                    response = "*Now playing:* {0} \n*Requested by:* {1}".format(song_name, current_song.get_creator())
+                    requester = _slackify_user(current_song.get_creator())
+                    response = "*Now playing:* {0} \n*Requested by:* <@{1}>".format(song_name, requester)
                     print("channel: ", this_channel)
                     slack_client.api_call("chat.postMessage", channel=this_channel, text=response)
 
